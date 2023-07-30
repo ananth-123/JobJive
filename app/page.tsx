@@ -2,8 +2,8 @@ import styles from "./Home.module.css"
 
 export default async function Page() {
   return (
-    <>
-      <div className="bg-grid-slate-200 h-[100vh] z-10 ">
+    <div className="bg-grid-slate-200 z-10">
+      <div className=" h-[100vh] ">
         <div className={styles.nav}>
           <a
             href="/"
@@ -145,6 +145,6 @@ export default async function Page() {
           </p>
         </div>
       </footer>
-    </>
+    </div>
   )
 }
