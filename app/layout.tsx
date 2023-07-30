@@ -1,22 +1,24 @@
-import { Inter as FontSans } from "next/font/google"
 import localFont from "next/font/local"
 
 import "@/styles/globals.css"
-import { siteConfig } from "@/config/site"
-import { absoluteUrl, cn } from "@/lib/utils"
-import { Toaster } from "@/components/ui/toaster"
-import { Analytics } from "@/components/analytics"
-import { TailwindIndicator } from "@/components/tailwind-indicator"
-import { ThemeProvider } from "@/components/theme-provider"
+import Link from "next/link"
 
-const fontSans = FontSans({
-  subsets: ["latin"],
+import { siteConfig } from "@/config/site"
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
+import Toaster from "@/components/ui/toaster"
+import SiteFooter from "@/components/site-footer"
+import { TailwindIndicator } from "@/components/tailwind-indicator"
+import ThemeProvider from "@/components/theme-provider"
+
+const fontSans = localFont({
+  src: "../assets/fonts/Satoshi-Regular.woff2",
   variable: "--font-sans",
-})
+}) as { variable: string }
 
 // Font files can be colocated inside of `pages`
 const fontHeading = localFont({
-  src: "../assets/fonts/CalSans-SemiBold.woff2",
+  src: "../assets/fonts/Satoshi-Bold.woff2",
   variable: "--font-heading",
 })
 
@@ -71,10 +73,10 @@ export const metadata = {
   manifest: `${siteConfig.url}/site.webmanifest`,
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function Layout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
+      {/* <head /> */}
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
@@ -83,10 +85,27 @@ export default function RootLayout({ children }: RootLayoutProps) {
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-          <Analytics />
-          <Toaster />
-          <TailwindIndicator />
+          {/* <header className="container z-40 bg-background">
+            <div className="flex h-20 items-center justify-between py-6">
+              <nav>
+                <Link
+                  href="/login"
+                  className={cn(
+                    buttonVariants({ variant: "secondary", size: "sm" }),
+                    "px-4"
+                  )}
+                >
+                  Login
+                </Link>
+              </nav>
+            </div>
+          </header> */}
+          <main className="flex-1">
+            {children}
+            <Toaster />
+            <TailwindIndicator />
+          </main>
+          <SiteFooter />
         </ThemeProvider>
       </body>
     </html>

@@ -116,7 +116,7 @@ export async function GET(req: Request) {
                   stroke-linejoin="round"
                 />
               </svg>
-              <div tw="flex ml-2">github.com/elevenlabs/taxonomy</div>
+              <div tw="flex ml-2">github.com/elevenlabs/CareerBoostPro</div>
             </div>
           </div>
         </div>
