@@ -1,6 +1,6 @@
 import styles from "./Home.module.css"
 
-export default async function Page() {
+export default async function IndexPage() {
   return (
     <div className="bg-grid-slate-200 z-10">
       <div className=" h-[100vh] ">
