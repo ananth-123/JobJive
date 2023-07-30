@@ -1,4 +1,10 @@
+import { type Config } from "tailwindcss"
+
 const { fontFamily } = require("tailwindcss/defaultTheme")
+const {
+  default: flattenColorPalette,
+} = require("tailwindcss/lib/util/flattenColorPalette")
+const svgToDataUri = require("mini-svg-data-uri")
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -78,5 +84,18 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  plugins: [
+    function ({ matchUtilities, theme }: { matchUtilities: any, theme: any }) {
+      matchUtilities(
+        {
+          "bg-grid": (value: string) => ({
+            backgroundImage: `url("${svgToDataUri(
+              `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="12" height="12" fill="none" stroke="${value}"><path d="M0 .5H31.5V32"/></svg>`
+            )}")`,
+          }),
+        },
+        { values: flattenColorPalette(theme("backgroundColor")), type: "color" }
+      )
+    },
+  ],
 }
