@@ -11,7 +11,6 @@ export async function GET(req: NextRequest) {
       "Content-Type": "application/x-www-form-urlencoded",
     },
   }
-
   try {
     const tokenResponse = await axios.post(
       `https://${speechRegion}.api.cognitive.microsoft.com/sts/v1.0/issueToken`,
