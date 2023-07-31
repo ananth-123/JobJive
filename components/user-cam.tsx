@@ -1,15 +1,19 @@
 import React, { useEffect, useRef } from "react"
 
-const UserCam = ({ isVideoOn }) => {
+const UserCam = () => {
   const videoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
+    // Function to get user media stream
     const getUserMediaStream = async () => {
       try {
+        // Get the user media stream from the webcam
         const stream = await navigator.mediaDevices.getUserMedia({
           video: true,
         })
-        if (videoRef.current && isVideoOn) {
+
+        // Set the stream as the video source
+        if (videoRef.current) {
           videoRef.current.srcObject = stream
         }
       } catch (error) {
@@ -17,8 +21,10 @@ const UserCam = ({ isVideoOn }) => {
       }
     }
 
+    // Call the function to get user media stream
     getUserMediaStream()
 
+    // Cleanup function to stop the video stream when the component unmounts
     return () => {
       if (
         videoRef.current &&
@@ -28,33 +34,16 @@ const UserCam = ({ isVideoOn }) => {
         tracks.forEach((track) => track.stop())
       }
     }
-  }, [isVideoOn])
-
-  const AvatarPlaceholder = () => {
-    const avatarUrl =
-      "https://illustrations.popsy.co/amber/man-with-short-hair-avatar.svg"
-
-    return (
-      <img
-        src={avatarUrl}
-        alt="Avatar Placeholder"
-        className="rounded-full bg-white flex items-center justify-center"
-      />
-    )
-  }
+  }, [])
 
   return (
-    <div className="w-64 h-64 md:w-96 md:h-96 rounded-full overflow-hidden shadow-lg">
-      {isVideoOn ? (
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-          className="w-full h-full object-cover"
-        />
-      ) : (
-        <AvatarPlaceholder />
-      )}
+    <div>
+      <video
+        className="rounded-full w-1/2 h-full"
+        ref={videoRef}
+        autoPlay
+        playsInline
+      />
     </div>
   )
 }

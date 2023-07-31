@@ -16,6 +16,8 @@ import { MicButton } from "@/components/mic"
 import UserCam from "@/components/user-cam"
 import { VideoButton } from "@/components/video"
 
+let tokenObj = null as any,
+  speechConfig
 export default function StartInterview() {
   const [currentUserChat, setCurrentUserChat] = useState("")
   const [micOn, setMicOn] = useState(false)
@@ -37,18 +39,237 @@ export default function StartInterview() {
     setIsVideoOn((prev) => !prev)
   }
 
+  useEffect(() => {
+    ;(async () => {
+      tokenObj = await getTokenOrRefresh()
+      speechConfig = speechsdk.SpeechConfig.fromAuthorizationToken(
+        tokenObj.authToken,
+        tokenObj.region
+      )
+      speechConfig.speechRecognitionLanguage = "en-US"
+    })()
+  }, [])
+
+  const pronunciationAssess = () => {
+    let pushStream = speechsdk.AudioInputStream.createPushStream(
+      speechsdk.AudioStreamFormat.getWaveFormatPCM(44100, 16, 1)
+    )
+
+    async function process(buffer, referenceText) {
+      pushStream.write(buffer)
+      pushStream.close()
+      let audioConfig = speechsdk.AudioConfig.fromStreamInput(pushStream)
+
+      speechConfig.speechRecognitionLanguage = "en-US"
+      const pronunciationAssessmentConfig =
+        new speechsdk.PronunciationAssessmentConfig(
+          referenceText,
+          speechsdk.PronunciationAssessmentGradingSystem.HundredMark,
+          speechsdk.PronunciationAssessmentGranularity.Phoneme,
+          true
+        )
+      var reco = new speechsdk.SpeechRecognizer(speechConfig, audioConfig)
+      pronunciationAssessmentConfig.applyTo(reco)
+      function onRecognizedResult(result) {
+        console.log("pronunciation assessment for: ", result.text)
+        var pronunciation_result =
+          speechsdk.PronunciationAssessmentResult.fromResult(result)
+        console.log(
+          " Accuracy score: ",
+          pronunciation_result.accuracyScore,
+          "\n",
+          "pronunciation score: ",
+          pronunciation_result.pronunciationScore,
+          "\n",
+          "completeness score : ",
+          pronunciation_result.completenessScore,
+          "\n",
+          "fluency score: ",
+          pronunciation_result.fluencyScore
+        )
+        console.log("  Word-level details:")
+        _.forEach(pronunciation_result.detailResult.Words, (word: any, idx) => {
+          console.log(
+            "    ",
+            idx + 1,
+            ": word: ",
+            word.Word,
+            "\taccuracy score: ",
+            word.PronunciationAssessment.AccuracyScore,
+            "\terror type: ",
+            word.PronunciationAssessment.ErrorType,
+            ";"
+          )
+        })
+        reco.close()
+      }
+
+      reco.recognizeOnceAsync(function (successfulResult) {
+        onRecognizedResult(successfulResult)
+      })
+    }
+
+    let leftchannel = [] as any
+    let rightchannel = [] as any
+    let recorder = null as any
+    let recordingLength = 0 as any
+    let volume = null as any
+    let mediaStream = null as any
+    let sampleRate = 44100 as any
+    let context = null as any
+    let blob = null as Blob | null
+
+    function flattenArray(channelBuffer, recordingLength) {
+      let result = new Float32Array(recordingLength)
+      let offset = 0
+      for (let i = 0; i < channelBuffer.length; i++) {
+        let buffer = channelBuffer[i]
+        result.set(buffer, offset)
+        offset += buffer.length
+      }
+      return result
+    }
+
+    function interleave(leftChannel, rightChannel) {
+      let length = leftChannel.length + rightChannel.length
+      let result = new Float32Array(length)
+
+      let inputIndex = 0
+
+      for (let index = 0; index < length; ) {
+        result[index++] = leftChannel[inputIndex]
+        result[index++] = rightChannel[inputIndex]
+        inputIndex++
+      }
+      return result
+    }
+
+    function writeUTFBytes(view, offset, string) {
+      for (let i = 0; i < string.length; i++) {
+        view.setUint8(offset + i, string.charCodeAt(i))
+      }
+    }
+
+    const startRecording = async () => {
+      navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia
+      navigator.mediaDevices
+        .getUserMedia({
+          audio: true,
+        })
+        .then(
+          function (e) {
+            console.log("user consent")
+
+            // creates the audio context
+            window.AudioContext = window.AudioContext
+            context = new AudioContext()
+
+            // creates an audio node from the microphone incoming stream
+            mediaStream = context.createMediaStreamSource(e)
+
+            // https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createScriptProcessor
+            // bufferSize: the onaudioprocess event is called when the buffer is full
+            let bufferSize = 2048
+            let numberOfInputChannels = 2
+            let numberOfOutputChannels = 2
+            if (context.createScriptProcessor) {
+              recorder = context.createScriptProcessor(
+                bufferSize,
+                numberOfInputChannels,
+                numberOfOutputChannels
+              )
+            } else {
+              recorder = context.createJavaScriptNode(
+                bufferSize,
+                numberOfInputChannels,
+                numberOfOutputChannels
+              )
+            }
+
+            recorder.onaudioprocess = function (e) {
+              leftchannel.push(
+                new Float32Array(e.inputBuffer.getChannelData(0))
+              )
+              rightchannel.push(
+                new Float32Array(e.inputBuffer.getChannelData(1))
+              )
+              recordingLength += bufferSize
+            }
+
+            // we connect the recorder
+            mediaStream.connect(recorder)
+            recorder.connect(context.destination)
+          },
+          function (e) {
+            console.error(e)
+          }
+        )
+    }
+
+    const stopRecording = (referenceText) => {
+      recorder.disconnect(context.destination)
+      mediaStream.disconnect(recorder)
+
+      // we flat the left and right channels down
+      // Float32Array[] => Float32Array
+      let leftBuffer = flattenArray(leftchannel, recordingLength)
+      let rightBuffer = flattenArray(rightchannel, recordingLength)
+      // we interleave both channels together
+      // [left[0],right[0],left[1],right[1],...]
+      // let interleaved = interleave(leftBuffer, rightBuffer)
+
+      // we create our wav file
+      let buffer = new ArrayBuffer(44 + leftBuffer.length * 2)
+      let view = new DataView(buffer)
+
+      // RIFF chunk descriptor
+      writeUTFBytes(view, 0, "RIFF")
+      view.setUint32(4, 44 + leftBuffer.length * 2, true)
+      writeUTFBytes(view, 8, "WAVE")
+      // FMT sub-chunk
+      writeUTFBytes(view, 12, "fmt ")
+      view.setUint32(16, 16, true) // chunkSize
+      view.setUint16(20, 1, true) // wFormatTag
+      view.setUint16(22, 1, true) // wChannels: stereo (2 channels)
+      view.setUint32(24, sampleRate, true) // dwSamplesPerSec
+      view.setUint32(28, sampleRate * 2, true) // dwAvgBytesPerSec
+      view.setUint16(32, 4, true) // wBlockAlign
+      view.setUint16(34, 16, true) // wBitsPerSample
+      // data sub-chunk
+      writeUTFBytes(view, 36, "data")
+      view.setUint32(40, leftBuffer.length * 2, true)
+
+      // write the PCM samples
+      let index = 44
+      let volume = 1
+      for (let i = 0; i < leftBuffer.length; i++) {
+        view.setInt16(index, leftBuffer[i] * (0x7fff * volume), true)
+        index += 2
+      }
+
+      // our final blob
+      blob = new Blob([view], { type: "audio/wav" })
+
+      blob.arrayBuffer().then((buf) => {
+        process(buf, referenceText)
+      })
+    }
+    startRecording()
+
+    return stopRecording
+  }
+
   const sttFromMic = async () => {
+    if (!tokenObj) {
+      setMicOn(false)
+      return
+    }
+    const stop = pronunciationAssess()
     let out = ""
     console.log("sttFromMic")
     let stopper
-    const tokenObj = await getTokenOrRefresh()
-    const speechConfig = speechsdk.SpeechConfig.fromAuthorizationToken(
-      tokenObj.authToken,
-      tokenObj.region
-    )
-    speechConfig.speechRecognitionLanguage = "en-US"
 
-    const audioConfig = speechsdk.AudioConfig.fromDefaultMicrophoneInput()
+    const audioConfig = speechsdk.AudioConfig.fromMicrophoneInput()
     const recognizer = new speechsdk.SpeechRecognizer(speechConfig, audioConfig)
 
     recognizer.recognizing = (s, e) => {
@@ -59,10 +280,6 @@ export default function StartInterview() {
     recognizer.recognized = (s, e) => {
       if (e.result.reason == ResultReason.RecognizedSpeech) {
         out += e.result.text + " "
-        // setCurrentFullUserMsg((m) => {
-        //   console.log(m + e.result.text)
-        //   return m + e.result.text + " "
-        // })
       } else if (e.result.reason == ResultReason.NoMatch) {
         // setDisplayText("NOMATCH: Speech could not be recognized.")
         recognizer.stopContinuousRecognitionAsync()
@@ -87,6 +304,7 @@ export default function StartInterview() {
     }
 
     recognizer.sessionStopped = (s, e) => {
+      stop(out)
       setData((data) => [
         ...data,
         {
@@ -101,6 +319,7 @@ export default function StartInterview() {
         .post("/api/chatGPT", { answer: out, jobRole: "Software Engineer" })
         .then((res) => {
           console.log(res.data.content)
+
           setData((data) => [
             ...data,
             {
@@ -256,7 +475,7 @@ export default function StartInterview() {
   return (
     <div className="flex flex-row px-24 py-10 w-full h-screen justify-between">
       <div className="relative w-full md:w-3/4 h-full flex flex-col md:flex-row md:justify-evenly md:items-center gap-4">
-        <UserCam isVideoOn={isVideoOn} />
+        <UserCam />
         <div className="relative w-96 h-96 rounded-full bg-gray-200 overflow-hidden flex justify-center items-center">
           {videoURL && (
             <ReactPlayer
