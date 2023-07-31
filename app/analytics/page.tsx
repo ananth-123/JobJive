@@ -69,7 +69,7 @@ export default function Page() {
 
   const getAudioURL = async () => {
     const form = new FormData()
-    const response = await fetch("http://localhost:3000/audios/audio.mp3")
+    const response = await fetch("https://job-jive.vercel.app/audios/audio.mp3")
     const audioBlob = await response.blob()
     form.append("audio", audioBlob, "nice.mp3")
 
