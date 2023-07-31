@@ -2,6 +2,10 @@
 
 import React, { useEffect, useState } from "react"
 
+import { getCurrentUser } from "@/lib/session"
+
+//import { setCookie  } from "@/lib/utils"
+
 import {
   Accordion,
   AccordionContent,
@@ -25,7 +29,6 @@ import {
   TabsList,
   TabsTrigger,
 } from "../../components/ui/tabs"
-import { Textarea } from "../../components/ui/textarea"
 
 export default function Page() {
   const [tab, setTab] = useState("interviewers")
@@ -45,7 +48,7 @@ export default function Page() {
           {start == false ? (
             <>
               <div className="flex flex-col justify-center items-center space-y-5">
-                <p className="text-xl">Hello Balayya</p>
+                <p className="text-xl">Hello </p>
                 <Tabs
                   value={tab}
                   className="w-[600px] dark:bg-white dark:text-white"

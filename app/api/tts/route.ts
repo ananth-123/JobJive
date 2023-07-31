@@ -2,20 +2,31 @@ import { NextRequest, NextResponse } from "next/server"
 
 const voice = require("elevenlabs-node")
 
-export async function POST(req: NextRequest, res: NextResponse) {
-  const { voice_id } = await req.json()
+export async function POST(req: NextRequest) {
+  try {
+    const { voice_id, text_input } = await req.json()
+    const fileName = "public/audios/audio.mp3" // The name of your audio file
 
-  const fileName = "public/audios/audio.mp3" // The name of your audio file
-  const textInput =
-    "hello ananth, daniel and alwin. how are you guys? nice to meet youuu" // The text you wish to convert to speech
+    const resp = await voice.textToSpeech(
+      process.env.ELEVENLABS_API_KEY,
+      voice_id,
+      fileName,
+      text_input
+    )
 
-  voice
-    .textToSpeech(process.env.ELEVENLABS_API_KEY, voice_id, fileName, textInput)
-    .then((resp) => {
-      console.log(resp)
-      return NextResponse.json({ nice: resp.status }, { status: 200 })
+    console.log(resp)
+    return new NextResponse(JSON.stringify({ nice: resp.status }), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
-    .catch((e) => {
-      return NextResponse.json({ error: e.message }, { status: 500 })
+  } catch (e) {
+    return new NextResponse(JSON.stringify({ error: e.message }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
+  }
 }
