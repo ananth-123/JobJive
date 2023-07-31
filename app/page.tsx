@@ -3,6 +3,9 @@ import styles from "./Home.module.css"
 export default async function IndexPage() {
   return (
     <div className="bg-grid-slate-200 z-10">
+      <div className={styles.bgCustom1}>
+        <div className={styles.bgCustom2}></div>
+      </div>
       <div className=" h-[100vh] ">
         <div className={styles.nav}>
           <a
@@ -76,7 +79,7 @@ export default async function IndexPage() {
                 height="16"
               >
                 <path
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                   d="M6.22 3.22a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 010-1.06z"
                 ></path>
               </svg>
@@ -89,7 +92,7 @@ export default async function IndexPage() {
                 height="16"
               >
                 <path
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                   d="M8.22 2.97a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06l2.97-2.97H3.75a.75.75 0 010-1.5h7.44L8.22 4.03a.75.75 0 010-1.06z"
                 ></path>
               </svg>
@@ -133,18 +136,7 @@ export default async function IndexPage() {
             </a>
           </div>
         </div>
-
-        <div className={styles.bgCustom1}>
-          <div className={styles.bgCustom2}></div>
-        </div>
       </div>
-      <footer className="z-10 border-t border-gray-200 bg-white/50 backdrop-blur-lg">
-        <div className="border-t border-gray-900/10 flex justify-center">
-          <p className="w-[80%] py-10 text-sm leading-5 text-gray-500">
-            © 2023 JobJive
-          </p>
-        </div>
-      </footer>
     </div>
   )
 }
