@@ -79,3 +79,10 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+
+@layer components {
+  .bg-mark {
+    content: "";
+    background-image: url("https://www.personizely.net/_nuxt/mark.b4cbb44d.svg");
+  }
+}

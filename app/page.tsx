@@ -1,3 +1,5 @@
+import Pricing from "@/components/pricing"
+
 import styles from "./Home.module.css"
 
 export default async function IndexPage() {
@@ -11,20 +13,34 @@ export default async function IndexPage() {
           <a
             href="/"
             aria-current="page"
-            className="logo-link w-inline-block w--current"
+            className="logo-link w-[125px] h-auto flex items-center justify-center"
           >
-            <img
-              src="https://uploads-ssl.webflow.com/6408bea3de5aef58b7e197d4/6408c50680c7dae0a89901a1_logo.svg"
-              loading="eager"
-              alt="diagram logo"
-              className="logo"
-            />
+            <svg viewBox="20 175 425 150" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M 74.345 219.738 L 97.93 233.465 C 101.741 235.683 104.088 239.759 104.094 244.168 L 104.161 290.517 L 132.417 274.646 L 132.417 228.61 C 132.417 224.185 130.06 220.096 126.231 217.877 L 102.05 203.867 L 74.345 219.738 Z"
+                fill="rgb(9, 11, 23)"
+              ></path>
+              <path
+                d="M 98.396 274.646 L 74.811 260.919 C 70.999 258.701 68.652 254.625 68.646 250.216 L 68.58 203.867 L 40.324 219.738 L 40.324 265.773 C 40.324 270.198 42.681 274.288 46.51 276.507 L 70.691 290.518 L 98.396 274.646 Z"
+                fill="rgb(9, 11, 23)"
+              ></path>
+              <text
+                fontFamily="var(--font-sans)"
+                letterSpacing="0.05em"
+                fontSize="76px"
+                fontWeight="700"
+                x="147.394"
+                y="272.293"
+              >
+                JobJive
+              </text>
+            </svg>
           </a>
           <div className="rounded-full backdrop-blur-sm bg-white-500/30 pl-10">
             <div className={styles.navList}>
-              <a href="#magician" className={styles.navItem}>
+              <a href="#pricing" className={styles.navItem}>
                 <div className="tracking-[.2px] font-semibold text-slate-400 hover:text-black">
-                  Magician
+                  Pricing
                 </div>
               </a>
               <a href="#genius" className={styles.navItem}>
@@ -66,7 +82,7 @@ export default async function IndexPage() {
             className="group mx-auto flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full border border-gray-200 bg-white px-7 py-2 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.1)] backdrop-blur transition-all hover:border-gray-300 hover:bg-white/50"
             href="https://elevenlabs.io/"
           >
-            <p className="text-sm font-semibold text-gray-700">
+            <p className="text-sm font-semibold text-gray-700 ">
               Powered by ElevenLabs
             </p>
             <div className="group relative flex items-center ">
@@ -137,6 +153,7 @@ export default async function IndexPage() {
           </div>
         </div>
       </div>
+      <Pricing />
     </div>
   )
 }
