@@ -10,6 +10,14 @@ const nextConfig = {
     appDir: true,
     serverComponentsExternalPackages: ["@prisma/client"],
   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "https://api.job-jive.vercel.app/:path*",
+      },
+    ]
+  },
 }
 
 export default withContentlayer(nextConfig)
