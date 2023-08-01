@@ -440,7 +440,7 @@ export default function StartInterview() {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://localhost:3000/api/tts",
+      url: "/api/tts",
       headers: {
         "Content-Type": "application/json",
       },
