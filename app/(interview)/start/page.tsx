@@ -352,7 +352,7 @@ export default function StartInterview() {
       headers: {
         accept: "application/json",
         authorization:
-          "Basic Y25KbGJua3lNRUJuYldGcGJDNWpiMjA6MnF0cENXQ3dLUzJQdHJINVBhZEQz",
+          `Basic ${process.env.DID_API_KEY}`,
       },
     }
 
@@ -383,7 +383,7 @@ export default function StartInterview() {
         accept: "application/json",
         "content-type": "application/json",
         authorization:
-          "Basic Y25KbGJua3lNRUJuYldGcGJDNWpiMjA6MnF0cENXQ3dLUzJQdHJINVBhZEQz",
+          `Basic ${process.env.DID_API_KEY}`,
       },
       data: {
         script: {
@@ -414,7 +414,7 @@ export default function StartInterview() {
       headers: {
         accept: "application/json",
         authorization:
-          "Basic Y25KbGJua3lNRUJuYldGcGJDNWpiMjA6MnF0cENXQ3dLUzJQdHJINVBhZEQz",
+          `Basic ${process.env.DID_API_KEY}`,
       },
       data: form,
     }
