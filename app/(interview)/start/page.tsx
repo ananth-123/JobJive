@@ -404,7 +404,7 @@ export default function StartInterview() {
 
   const getAudioURL = async () => {
     const form = new FormData()
-    const response = await fetch("http://localhost:3000/audios/audio.mp3")
+    const response = await fetch("/audios/audio.mp3")
     const audioBlob = await response.blob()
     form.append("audio", audioBlob, "nice.mp3")
 
