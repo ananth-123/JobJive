@@ -3,6 +3,10 @@
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
+import { getCurrentUser } from "@/lib/session"
+
+//import { setCookie  } from "@/lib/utils"
+
 import {
   Accordion,
   AccordionContent,
@@ -26,7 +30,6 @@ import {
   TabsList,
   TabsTrigger,
 } from "../../components/ui/tabs"
-import { Textarea } from "../../components/ui/textarea"
 
 export default function Page() {
   const [tab, setTab] = useState("interviewers")
