@@ -351,8 +351,7 @@ export default function StartInterview() {
       url: `https://api.d-id.com/talks/${talk_id}`,
       headers: {
         accept: "application/json",
-        authorization:
-          `Basic ${process.env.DID_API_KEY}`,
+        authorization: `Basic ${process.env.DID_API_KEY}`,
       },
     }
 
@@ -382,8 +381,7 @@ export default function StartInterview() {
       headers: {
         accept: "application/json",
         "content-type": "application/json",
-        authorization:
-          `Basic ${process.env.DID_API_KEY}`,
+        authorization: `Basic ${process.env.DID_API_KEY}`,
       },
       data: {
         script: {
@@ -404,7 +402,7 @@ export default function StartInterview() {
 
   const getAudioURL = async () => {
     const form = new FormData()
-    const response = await fetch("/audios/audio.mp3")
+    const response = await fetch("https://job-jive.vercel.app/audios/audio.mp3")
     const audioBlob = await response.blob()
     form.append("audio", audioBlob, "nice.mp3")
 
@@ -413,8 +411,7 @@ export default function StartInterview() {
       url: "https://api.d-id.com/audios",
       headers: {
         accept: "application/json",
-        authorization:
-          `Basic ${process.env.DID_API_KEY}`,
+        authorization: `Basic ${process.env.DID_API_KEY}`,
       },
       data: form,
     }
