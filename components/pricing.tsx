@@ -58,7 +58,7 @@ export default function Pricing() {
               </div>
               <div className="mx-auto pt-5 text-center">
                 <a
-                  href="https://app.personizely.net/register"
+                  href="/11lab"
                   rel="noopener noreferrer"
                   className="flex w-max items-center whitespace-nowrap px-5 py-3 text-xs font-semibold uppercase leading-none tracking-widest transition-all duration-500 hover:opacity-70 md:px-6 md:text-tiny rounded-lg bg-blue-700 h-12 text-white"
                 >
@@ -105,7 +105,7 @@ export default function Pricing() {
               </div>
               <div className="mx-auto pt-5 text-center">
                 <a
-                  href="https://app.personizely.net/register"
+                  href="/11lab"
                   rel="noopener noreferrer"
                   className="flex w-max items-center whitespace-nowrap px-5 py-3 text-xs font-semibold uppercase leading-none tracking-widest transition-all duration-500 hover:opacity-70 md:px-6 md:text-tiny rounded-lg bg-blue-700 h-12 md:h-14 text-white"
                 >
@@ -146,7 +146,7 @@ export default function Pricing() {
               <div className="mx-auto pt-5 text-center">
                 <a
                   aria-current="page"
-                  href="/pricing#contact-us"
+                  href="/11lab"
                   className="router-link-active router-link-exact-active flex w-max items-center whitespace-nowrap px-5 py-3 font-biennale text-xs font-semibold uppercase leading-none tracking-widest transition-all duration-500 hover:opacity-70 md:px-6 md:text-tiny rounded-lg bg-blue-700 h-12 text-white"
                 >
                   Contact us

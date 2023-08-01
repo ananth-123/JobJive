@@ -38,24 +38,24 @@ export default async function IndexPage() {
           </a>
           <div className="rounded-full backdrop-blur-sm bg-white-500/30 pl-10">
             <div className={styles.navList}>
+              <a href="#" className={styles.navItem}>
+                <div className="tracking-[.2px] font-semibold text-slate-400 hover:text-black">
+                  Home
+                </div>
+              </a>
               <a href="#pricing" className={styles.navItem}>
                 <div className="tracking-[.2px] font-semibold text-slate-400 hover:text-black">
                   Pricing
                 </div>
               </a>
-              <a href="#genius" className={styles.navItem}>
+              <a href="#" className={styles.navItem}>
                 <div className="tracking-[.2px] font-semibold text-slate-400 hover:text-black">
-                  Genius
+                  Features
                 </div>
               </a>
-              <a href="#automator" className={styles.navItem}>
+              <a href="#" className={styles.navItem}>
                 <div className="tracking-[.2px] font-semibold text-slate-400 hover:text-black">
-                  Automator
-                </div>
-              </a>
-              <a href="#ui-ai" className={styles.navItem}>
-                <div className="tracking-[.2px] font-semibold text-slate-400 hover:text-black">
-                  UI-AI
+                  Contact
                 </div>
               </a>
             </div>
@@ -127,7 +127,7 @@ export default async function IndexPage() {
           </h2>
           <div className="mx-auto mt-20 flex max-w-fit space-x-4">
             <a
-              href=""
+              href="/11lab"
               className="rounded-full border border-black bg-black px-5 py-2 text-sm text-white shadow-lg transition-all hover:bg-white hover:text-black"
             >
               Request Free Trial

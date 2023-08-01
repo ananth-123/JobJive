@@ -8,13 +8,13 @@ import {
   ResultReason,
 } from "microsoft-cognitiveservices-speech-sdk"
 import * as speechsdk from "microsoft-cognitiveservices-speech-sdk"
+import { ColorRing } from "react-loader-spinner"
 import ReactPlayer from "react-player"
 
 import { getTokenOrRefresh } from "@/lib/token_util"
 import { ChatBox } from "@/components/chatBox"
 import { MicButton } from "@/components/mic"
 import UserCam from "@/components/user-cam"
-import { VideoButton } from "@/components/video"
 
 let tokenObj = null as any,
   speechConfig
@@ -474,25 +474,42 @@ export default function StartInterview() {
 
   return (
     <div className="flex flex-row px-24 py-10 w-full h-screen justify-between">
-      <div className="relative w-full md:w-3/4 h-full flex flex-col md:flex-row md:justify-evenly md:items-center gap-4">
+      <div className="relative w-full md:w-3/4 h-full flex flex-col md:flex-row md:justify-center md:items-center gap-4">
         <UserCam />
-        <div className="relative w-96 h-96 rounded-full bg-gray-200 overflow-hidden flex justify-center items-center">
-          {videoURL && (
+        <div className="relative h-[60%] aspect-square rounded-full bg-gray-200 overflow-hidden flex justify-center items-center">
+          {videoURL ? (
             <ReactPlayer
+              width={"100%"}
+              height={"100%"}
               url={videoURL}
               playing
-              className="w-full h-full object-cover rounded-full"
+              className="object-cover rounded-full"
             />
+          ) : (
+            <div className=" relative w-full h-full">
+              <img
+                src="https://create-images-results.d-id.com/DefaultPresenters/Noelle_f/image.jpeg"
+                alt="interview"
+              />
+              <div className="w-full h-full bg-[rgba(0,0,0,0.4)] absolute left-0 top-0"></div>
+              <ColorRing
+                visible={true}
+                height="80"
+                width="80"
+                ariaLabel="blocks-loading"
+                wrapperClass="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                colors={[
+                  "white",
+                  "rgba(0,0,0,0.5",
+                  "rgba(0,0,0,0.5",
+                  "rgba(0,0,0,0.5",
+                  "rgba(0,0,0,0.5",
+                ]}
+              />
+            </div>
           )}
         </div>
-        <div className="md:absolute flex md:bottom-5 md:left-1/2 md:transform md:-translate-x-1/2 gap-2">
-          <MicButton
-            sttFromMic={sttFromMic}
-            micOn={micOn}
-            setMicOn={setMicOn}
-          />
-          <VideoButton videoOn={isVideoOn} setVideoOn={setIsVideoOn} />
-        </div>
+        <MicButton sttFromMic={sttFromMic} micOn={micOn} setMicOn={setMicOn} />
       </div>
 
       <div className="w-[40%] bg-gray-100 py-5 px-2 overflow-scroll">

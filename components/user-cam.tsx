@@ -39,7 +39,7 @@ const UserCam = () => {
   return (
     <div>
       <video
-        className="rounded-full w-1/2 h-full"
+        className="rounded-full absolute bg-gray-900 aspect-square h-[30%] w-auto top-0 left-0"
         ref={videoRef}
         autoPlay
         playsInline
