@@ -352,7 +352,7 @@ export default function StartInterview() {
       headers: {
         accept: "application/json",
         authorization:
-          "Basic WkdGdWFtVnpNREF5UUdkdFlXbHNMbU52YlE6ZnlMZXh0aEloVmp3TE56bnF5RnN4",
+          "Basic ZDJrNWQyRmhPVEYwUUcxdmVtMWhhV3d1WTI5dDpGbzFQZHpocU40VW96eklUQ091S2o=",
       },
     }
 
@@ -383,7 +383,7 @@ export default function StartInterview() {
         accept: "application/json",
         "content-type": "application/json",
         authorization:
-          "Basic WkdGdWFtVnpNREF5UUdkdFlXbHNMbU52YlE6ZnlMZXh0aEloVmp3TE56bnF5RnN4",
+          "Basic ZDJrNWQyRmhPVEYwUUcxdmVtMWhhV3d1WTI5dDpGbzFQZHpocU40VW96eklUQ091S2o=",
       },
       data: {
         script: {
@@ -414,7 +414,7 @@ export default function StartInterview() {
       headers: {
         accept: "application/json",
         authorization:
-          "Basic WkdGdWFtVnpNREF5UUdkdFlXbHNMbU52YlE6ZnlMZXh0aEloVmp3TE56bnF5RnN4",
+          "Basic ZDJrNWQyRmhPVEYwUUcxdmVtMWhhV3d1WTI5dDpGbzFQZHpocU40VW96eklUQ091S2o=",
       },
       data: form,
     }
